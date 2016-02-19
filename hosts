@@ -1,8 +1,8 @@
 [web]
 web-[01:02] from_template='yes' datastore='NFS' template_src='centos7' cluster='cluster_i5'
-[db-vms]
+[db]
 db-01 from_template='yes' datastore='NFS' template_src='centos7'  cluster='cluster_i5'
-[lb-vms]
+[lb]
 lb-01 from_template='yes' datastore='NFS' cluster='cluster_i5' template_src='centos7' 
 [elk]
 elk from_template='yes' datastore='NFS' cluster='cluster_i5' template_src='ubuntu' resource_pool='ubuntu'
