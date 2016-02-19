@@ -1,0 +1,6 @@
+---
+  - hosts: all
+    tasks: 
+       - name: change server hostname
+         command: hostname {{ inventory_hostname }}
+

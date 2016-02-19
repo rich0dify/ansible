@@ -1,0 +1,16 @@
+---
+ - hosts: lb-vms
+   tasks: 
+     - service: name=nginx state=stopped
+ - hosts: web-vms
+   tasks:
+     - service: name=httpd state=stopped
+ - hosts: db-vms
+   tasks:
+     - service: name=mariadb state=restarted
+ - hosts: lb-vms
+   tasks:
+     - service: name=nginx state=started
+ - hosts: web-vms
+   tasks:
+     - service: name=httpd state=started

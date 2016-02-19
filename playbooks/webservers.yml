@@ -1,0 +1,44 @@
+---
+  - hosts: web-vms
+    tasks: 
+     - name: download and install pip
+       command: bash -c "curl https://bootstrap.pypa.io/get-pip.py | python -" 
+
+     - name: install apache2 with addons
+       yum: name={{ item }} state=present update_cache=yes
+       with_items:
+          - httpd 
+          - mod_wsgi
+          - python-virtualenv
+          - libselinux-python
+
+     - name: ensure httpd started
+       service: name=httpd state=started enabled=yes
+
+    # CentOS is shit
+    # - name: ensure mod_wsgi is enabled
+    #   apache_mods_enabled: state=present name=wsgi
+    #   notify: restart apache2
+
+     - name: copy demo app source
+       copy: src=/etc/ansible/files/demo/app/ dest=/var/www/demo mode=0755
+       notify: restart apache2
+
+     - name: copy apache vhost config
+       copy: src=/etc/ansible/files/demo/demo.conf dest=/etc/httpd/conf.d mode=0755
+       notify: restart apache2
+
+     - name: setup virtualenv
+       pip: requirements=/var/www/demo/requirements.txt virtualenv=/var/www/demo/.venv
+       notify: restart apache2
+    
+    # for ubuntu, lern how to do checking for OS
+    # - name: deactivate default site
+    #   file: path=/etc/apache2/sites-enabled/000-default.conf state=absent
+    #   notify: restart apache2
+    # - name: activate demo site
+    #   files: src=/etc/apache2/sites-available/demo.conf dest=/etc/apache2/sites-enabled/000-default.conf state=link
+    
+    handlers:
+     - name: restart apache2
+       service: name=httpd state=restarted

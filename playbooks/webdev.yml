@@ -1,0 +1,10 @@
+---
+  - hosts: webdev
+    become: true
+    tasks:
+     - name: install node and npm
+       apt: name={{ item }} state=present update_cache=yes
+       with_items: 
+          - nginx
+          - node
+          - npm

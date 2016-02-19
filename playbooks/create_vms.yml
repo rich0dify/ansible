@@ -1,0 +1,31 @@
+---
+- hosts: elk
+  gather_facts: false
+  connection: local
+  user: remote
+  sudo: true
+
+  vars_prompt:
+   - name: "vcenter_hostname"
+     prompt: "Enter vcenter hostname"
+     private: no
+     default: "vcsa"
+   - name: "vcenter_user"
+     prompt: "Enter vcenter username"
+     private: no
+   - name: "vcenter_pass"
+     prompt: "Enter vcenter password"
+     private: yes
+
+  vars:
+     datacenter: 'datacentre'
+  tasks:
+    - vsphere_guest:
+       vcenter_hostname: "{{ vcenter_hostname }}"
+       username: "{{ vcenter_user }}"
+       password: "{{ vcenter_pass }}"
+       guest: "{{ inventory_hostname }}"
+       cluster: "{{ cluster }}"
+       template_src: "{{ template_src }}"
+       resource_pool: "/Resources/{{ resource_pool }}"
+       from_template: yes 
