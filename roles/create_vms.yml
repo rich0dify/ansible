@@ -28,5 +28,5 @@
         guest: "{{ inventory_hostname }}"
         state: present
         vm_extra_config:
-          notes: "{{ notes }}"
+          notes: "{{ inventory_hostname }}"
         
